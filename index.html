@@ -1,70 +1,128 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Number Level</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background: #f0f4f8;
-            padding: 50px 20px;
-        }
-        .box {
-            background: white;
-            max-width: 400px;
-            margin: auto;
-            padding: 30px;
-            border-radius: 15px;
-        }
-        input, button {
-            padding: 12px;
-            margin: 10px;
-            font-size: 18px;
-        }
-        button {
-            background: #2878e8;
-            color: white;
-            border: none;
-            border-radius: 8px;
-        }
-        #result {
-            font-size: 26px;
-            font-weight: bold;
-            margin-top: 20px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>猜数字挑战</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#dbeafe,#f5d0fe);
+  color: #172554;
+}
+.game {
+  width: min(100%,440px);
+  background: white;
+  border-radius: 24px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 18px 50px #33415525;
+}
+h1 { font-size: 30px; }
+p { line-height: 1.7; }
+.range {
+  display: inline-block;
+  padding: 10px;
+  background: #eff6ff;
+  border-radius: 20px;
+  color: #1d4ed8;
+}
+input {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 20px;
+  text-align: center;
+}
+button {
+  padding: 13px 18px;
+  margin: 12px 5px;
+  border: 0;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.primary { background: #4f46e5; color: white; }
+.secondary { background: #e2e8f0; }
+#message {
+  min-height: 54px;
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
 </head>
 <body>
-    <div class="box">
-        <h1>Number Level</h1>
-        <p>请输入一个数字：</p>
-        <input type="number" id="number" placeholder="输入数字">
-        <br>
-        <button onclick="checkLevel()">判断等级</button>
-        <div id="result"></div>
-    </div>
+<main class="game">
+  <h1>🎯 猜数字挑战</h1>
+  <p>我已经想好了一个数字！<br>猜猜它是多少吧！</p>
+  <div class="range">数字范围：1 ～ 100</div>
 
-    <script>
-        function checkLevel() {
-            let number = Number(document.getElementById("number").value);
-            let result = "";
+  <input id="guess" type="number"
+  min="1" max="100" placeholder="输入你的猜测">
 
-            if (document.getElementById("number").value === "") {
-                result = "请输入数字";
-            } else if (number <= 10) {
-                result = "easy";
-            } else if (number <= 40) {
-                result = "hard";
-            } else if (number <= 100) {
-                result = "very hard";
-            } else {
-                result = "impossible";
-            }
+  <div>
+    <button class="primary" onclick="makeGuess()">提交答案</button>
+    <button class="secondary" onclick="startGame()">重新开始</button>
+  </div>
 
-            document.getElementById("result").innerText = result;
-        }
-    </script>
+  <div id="message">准备好了吗？开始猜吧！</div>
+  <p id="count">已经猜了 0 次</p>
+</main>
+
+<script>
+let answer;
+let attempts;
+let finished;
+
+function startGame() {
+  answer = Math.floor(Math.random() * 100) + 1;
+  attempts = 0;
+  finished = false;
+  document.getElementById("guess").value = "";
+  document.getElementById("guess").disabled = false;
+  document.getElementById("message").textContent = "开始猜吧！";
+  document.getElementById("count").textContent = "已经猜了 0 次";
+}
+
+function makeGuess() {
+  if (finished) return;
+
+  let value = Number(document.getElementById("guess").value);
+
+  if (!Number.isInteger(value) || value < 1 || value > 100) {
+    document.getElementById("message").textContent =
+      "请输入 1 到 100 之间的整数！";
+    return;
+  }
+
+  attempts++;
+  document.getElementById("count").textContent =
+    "已经猜了 " + attempts + " 次";
+
+  if (value === answer) {
+    document.getElementById("message").textContent =
+      "🎉 恭喜你！猜对了！答案是 " + answer;
+    finished = true;
+    document.getElementById("guess").disabled = true;
+  } else if (value < answer) {
+    document.getElementById("message").textContent =
+      "太小了！再猜大一点 ⬆️";
+  } else {
+    document.getElementById("message").textContent =
+      "太大了！再猜小一点 ⬇️";
+  }
+}
+
+startGame();
+</script>
 </body>
 </html>
