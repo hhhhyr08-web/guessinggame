@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Level</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f0f4f8;
+            padding: 50px 20px;
+        }
+        .box {
+            background: white;
+            max-width: 400px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+        }
+        input, button {
+            padding: 12px;
+            margin: 10px;
+            font-size: 18px;
+        }
+        button {
+            background: #2878e8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+        #result {
+            font-size: 26px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Number Level</h1>
+        <p>请输入一个数字：</p>
+        <input type="number" id="number" placeholder="输入数字">
+        <br>
+        <button onclick="checkLevel()">判断等级</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function checkLevel() {
+            let number = Number(document.getElementById("number").value);
+            let result = "";
+
+            if (document.getElementById("number").value === "") {
+                result = "请输入数字";
+            } else if (number <= 10) {
+                result = "easy";
+            } else if (number <= 40) {
+                result = "hard";
+            } else if (number <= 100) {
+                result = "very hard";
+            } else {
+                result = "impossible";
+            }
+
+            document.getElementById("result").innerText = result;
+        }
+    </script>
+</body>
+</html>
